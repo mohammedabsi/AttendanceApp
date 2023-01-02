@@ -1,0 +1,150 @@
+<resources>
+    <string name="app_name">AttendanceApp</string>
+    <string name="login_btn">Login</string>
+    <string name="email_edt">Email</string>
+    <string name="password_edt">Password</string>
+
+    <string name="register_txt">if you dont have Account , click   </string>
+    <string name="fullname_edt">username</string>
+    <string name="confirm_password_edt">Confirm password</string>
+    <string name="register_btn">Register
+    </string>
+    <string name="user_name_edt">username</string>
+    <string name="upload_avatar_txt">Upload your avatar</string>∂
+    <string name="upload_post_txt">Upload your post </string>
+    <string name="create_post_btn">Create a post</string>
+    <string name="ella_txt">Ella</string>
+    <string name="follow_txt">Follow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tourist">Tourist</string>
+    <string name="influencer">Influencer</string>
+    <string name="account_type">نوع الحساب</string>
+    <string name="empty_list">you didnt share any post yet</string>
+    <string name="available">Available  :</string>
+    <string name="Posts">Posts</string>
+    <string name="search">بحث</string>
+    <string name="Favoriteinfluencer">Favorite influencer</string>
+    <string name="recomendedinfluencer">Recommended Influencer</string>
+    <string name="personalinfo">بيانات شخصية</string>
+    <string name="managefollowing">Manage Following</string>
+    <string name="settings">الاعدادات</string>
+    <string name="logout">تسجيل خروج</string>
+    <string name="changeprofilepic">Change Profile Photo</string>
+    <string name="name">الاسم</string>
+    <string name="phone">Phone</string>
+    <string name="privacy">Privacy and Security</string>
+    <string name="deleteaccount">Delete Account</string>
+    <string name="askq">Ask a Question</string>
+    <string name="faq">FAQ</string>
+    <string name="language">Language</string>
+
+    <string-array name="typespinner">
+        <item>Channel 1</item>
+        <item>Channel 2</item>
+        <item>Channel 3</item>
+        <item>Channel 4</item>
+    </string-array>
+    <string name="title_activity_on_board">OnBoardActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="location">Location</string>
+    <string name="followercount">0</string>
+    <string name="about">About</string>
+    <string name="visited">Visited</string>
+    <string name="abouttxt"> aboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutaboutabout</string>
+    <string name="content">Content</string>
+    <string name="visittraveleraccount">Visit Traveler Account</string>
+    <string name="comments">Comments</string>
+    <string name="channelname">Channel name</string>
+    <string name="addcomment">Add comment</string>
+    <string name="Bio">Bio</string>
+    <string name="view_comments">View Comments</string>
+    <string name="unfollow">UnFollow</string>
+    <string name="privacy_title">Privacy Policy for Tourist app</string>
+    <string name="privacy_1">At Tourist App, accessible from google.com, one of our main priorities is the privacy of our visitors.    This Privacy Policy document contains types of information that is collected and recorded by Tourist App and how we use it.   If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.  This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in Tourist App.  This policy is not applicable to any information collected offline or via channels other than this website. Our Privacy Policy was created with the help of the Free Privacy Policy Generator. Consent By using our website, you hereby consent to our Privacy Policy and agree to its terms. Information we collect The personal information that you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your personal information. If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us, and any other information you may choose to provide.   When you register for an Account, we may ask for your contact information, including items such as name, company name, address, email address, and telephone number.</string>
+    <string name="privacy_2">"We use the information we collect in various ways, including to:    * Provide, operate, and maintain our website   * Improve, personalize, and expand our website  * Understand and analyze how you use our website   * Develop new products, services, features, and functionality   * Communicate with you, either directly or through one of our partners, including for customer service, to provide you with updates and other information relating to the website, and for marketing and promotional purposes  * Send you emails   * Find and prevent fraud "</string>
+    <string name="privacy_title_2">How we use your information</string>
+    <string name="adcontrolpanel">Admin Control Panel</string>
+    <string name="logout_success">Logout Success</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_msg">Are You Sure you Want Delete Your Account ??</string>
+    <string name="delete_title">Delete Alert !</string>
+    <string name="ask_quetion">Ask Question</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">cancel</string>
+    <string name="camera_fragment">Click Here to upload image</string>
+    <string name="followed">is following you .</string>
+    <string name="unfollow_state">Unfollowed you</string>
+    <string name="follow_state">is Following you .</string>
+    <string name="success_image">Update Photo Success .</string>
+    <string name="oldpass">Old Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="change">Change</string>
+    <string name="posted_vlog">posted new vlog in</string>
+    <string name="answerQ">Questions</string>
+    <string name="delete_post">Are you sure to delete this post ?</string>
+    <string name="update_post">Update Post</string>
+    <string name="accept_state">\n is accepted :)</string>
+    <string name="reject_state">\n is rejected :(</string>
+    <string name="lang_fail">Failed to refresh the language</string>
+    <string name="lang_success">\"Language Changed \"</string>
+    <string name="question_ad">Question sent to admin</string>
+    <string name="api_redirect_sucess">Please wait to redirect you to the places that match the result</string>
+    <string name="api_failed">\"Couldnt find the place , try again with a better photo quality \"</string>
+    <string name="api_failed_2">Check your Connection</string>
+    <string name="accident_alert">Place Result</string>
+    <string name="up_suc">Upload success</string>
+    <string name="up_fail">Upload failed</string>
+    <string name="firestore_fail">Error , couldnt retrieve data</string>
+    <string name="email_edit_fail">you can\'t Edit Email !!</string>
+    <string name="update_succ">Update Name Success</string>
+    <string name="empty_field">Field is empty , type something</string>
+    <string name="update_fail">Update bio failed !</string>
+    <string name="empty_bio">Bio is empty , type something</string>
+    <string name="set_answer">Set your answer</string>
+    <string name="comment_added">\"Comment added \"</string>
+    <string name="comment_empty">You can\'t add empty comment</string>
+    <string name="feature_unavailable">\"Share feature not available yet \"</string>
+    <string name="like_feature">\"Like feature not available yet \"</string>
+    <string name="profile">profile</string>
+    <string name="channel_name">Channel name</string>
+    <string name="already_have_account">Already have account</string>
+    <string name="place_name">Place Name</string>
+    <string name="description">description</string>
+    <string name="city_or_location">City or location</string>
+    <string name="you_don_t_have_any_followers_yet">you don\'t have any followers yet</string>
+    <string name="explore">Explore</string>
+    <string name="onboard_1">Enrich yourself about landmarks info in Saudi Arabia through the smartest way</string>
+    <string name="post_name">post name</string>
+    <string name="post_desc">post Description</string>
+    <string name="add_your_bio">add your Bio</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="ma_alem_application">Ma\'alem Application</string>
+    <string name="create_content">Create Content!</string>
+    <string name="onboard_3">Unique experience to creating travel and tourism content</string>
+    <string name="be_close">Be Close!</string>
+    <string name="onboard_2">Follow your favorite travel blogger in tourism and travel field</string>
+    <string name="this_is_question">this is question</string>
+    <string name="this_is_answer">this is answer</string>
+    <string name="influencer_name">Influencer Name</string>
+    <string name="influecer_email">Influecer Email</string>
+    <string name="update_post_details">Update Post details</string>
+    <string name="clickhere">here</string>
+    <string name="login_text">Already have account ?</string>
+    <string name="mainpage">Home Page</string>
+    <string name="requests">Requeste</string>
+    <string name="register_complete">Register</string>
+    <string name="teacher">Teacher</string>
+    <string name="student">Student</string>
+    <string name="news">Latest News</string>
+
+
+</resources>
