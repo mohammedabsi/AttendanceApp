@@ -172,6 +172,8 @@ public class ProfileFragment extends Fragment {
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(email, old_Pass);
 
+
+
                 user.reauthenticate(credential)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
