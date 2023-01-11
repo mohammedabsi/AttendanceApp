@@ -106,7 +106,7 @@ public class ProfileFragment extends Fragment {
 
         dialog = new Dialog(getActivity());
         UpdatePass();
-//        final Snackbar snackbar = Snackbar
+//     //   final Snackbar snackbar = Snackbar
 //                .make(drawerLayout, "Coming On next Version", Snackbar.LENGTH_SHORT).setTextColor(getResources().getColor(R.color.secondry_color)).setBackgroundTint(getResources().getColor(R.color.secondry_color));
         edtpass.setOnClickListener(new View.OnClickListener() {
             @Override
