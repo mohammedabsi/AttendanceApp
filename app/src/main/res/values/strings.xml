@@ -145,6 +145,8 @@
     <string name="teacher">Teacher</string>
     <string name="student">Student</string>
     <string name="news">Latest News</string>
+    <string name="title_activity_admin">AdminActivity</string>
+    <string name="update_pass">Update Password</string>
 
 
 </resources>

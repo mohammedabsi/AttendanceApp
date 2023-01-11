@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView infbottomNavigationView;
     private Fragment selectedFragment = null;
     private TextView welcome_tv;
-    private ImageView logout;
+//    private ImageView logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        logout = findViewById(R.id.logout);
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MainActivity.this, SigninActivity.class));
-                finish();
-            }
-        });
+//        logout = findViewById(R.id.logout);
+//
+//        logout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         infbottomNavigationView = findViewById(R.id.bottomNavigationView);
         infbottomNavigationView.setBackground(null);
 

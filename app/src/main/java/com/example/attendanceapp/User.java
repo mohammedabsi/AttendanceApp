@@ -1,8 +1,9 @@
 package com.example.attendanceapp;
 public class User {
 
-    public String  mUserName , email, password , phone  ;
+    public String  mUserName , email, password , phone   , id ;
     public int type ;
+
 
 
 
@@ -10,19 +11,23 @@ public class User {
 
     }
 
-    public User(String mUserName, String email, String password , String  phone , int type ) {
+    public User(String mUserName, String email, String password , String  phone , int type , String id ) {
 
         this.mUserName = mUserName;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.type = type;
+        this.id = id;
 
 
 
 
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getPhone() {
         return phone;

@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -70,32 +71,18 @@ public class SigninActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-
+                    if (email.equalsIgnoreCase("admin@admin.com") && password.equalsIgnoreCase("admin123")) {
+                        Toast.makeText(SigninActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SigninActivity.this, AdminActivity.class));
+                        finish();
+                    }else {
 
                         Toast.makeText(SigninActivity.this, "Login success", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SigninActivity.this, MainActivity.class));
                         finish();
-//                    if (email.equalsIgnoreCase("admin@admin.com") && password.equalsIgnoreCase("admin123")) {
-//                    }else {
-//                        mfirebaseFirestore.collection("User").document(email).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                if (task.isSuccessful()){
-//                                    if (task.getResult().get("type").toString().equalsIgnoreCase("0")){
-//                                        log_progressBar.setVisibility(View.INVISIBLE);
-//                                        Toast.makeText(SigninActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-//                                        startActivity(new Intent(SigninActivity.this, UserMainActivity.class));
-//                                        finish();
-//                                    }else {
-//                                        log_progressBar.setVisibility(View.INVISIBLE);
-//                                        startActivity(new Intent(SignInActivity.this, InfluencerMainActivity.class));
-//                                        finish();
-//                                    }
-//                                }
-//                            }
-//                        });
-//
-//                    }
+
+
+                    }
 
 
 

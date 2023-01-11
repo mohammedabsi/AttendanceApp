@@ -12,4 +12,6 @@
     <color name="third_color">#C8E0E9</color>
     <color name="forth_color">#0047FF</color>
     <color name="darkgray">#B1ACAC</color>
+
+    <color name="backgroundColor">#CDFFFFFF</color>
 </resources>
