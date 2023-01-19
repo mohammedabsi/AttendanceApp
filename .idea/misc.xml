@@ -50,6 +50,7 @@
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/fragment_news.xml" value="0.35260416666666666" />
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/fragment_profile.xml" value="0.24289405684754523" />
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/fragment_requests.xml" value="0.23484848484848486" />
+        <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/fragment_student_main.xml" value="0.25252525252525254" />
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/login_fragment.xml" value="0.3138888888888889" />
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/register_fragment.xml" value="0.3138888888888889" />
         <entry key="..\:/projects/AttendanceApp/app/src/main/res/layout/single_request_item.xml" value="0.2972222222222222" />
@@ -59,7 +60,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

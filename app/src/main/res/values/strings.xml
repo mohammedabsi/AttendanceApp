@@ -147,6 +147,7 @@
     <string name="news">Latest News</string>
     <string name="title_activity_admin">AdminActivity</string>
     <string name="update_pass">Update Password</string>
+    <string name="studentid">Student Id</string>
 
 
 </resources>

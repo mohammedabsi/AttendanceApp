@@ -26,11 +26,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.UUID;
 
 
-
 public class SignupActivity extends AppCompatActivity {
 
     private EditText confirmPasswordEdt, userNameEdt, emailEdt, passwordEdt, phone;
     private ProgressBar reg_progressBar;
+    private EditText stdid;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
@@ -49,9 +49,23 @@ public class SignupActivity extends AppCompatActivity {
         confirmPasswordEdt = findViewById(R.id.confirmPasswordEdt);
         phone = findViewById(R.id.phone);
         reg_progressBar = findViewById(R.id.reg_progressBar);
+        stdid = findViewById(R.id.studid);
 
         std_RadioButton = findViewById(R.id.std_RadioButton);
         tch_RadioButton = findViewById(R.id.tch_RadioButton);
+
+ std_RadioButton.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View view) {
+        stdid.setVisibility(View.VISIBLE);
+     }
+ });
+        tch_RadioButton.setOnClickListener(new View.OnClickListener() {
+     @Override
+     public void onClick(View view) {
+        stdid.setVisibility(View.INVISIBLE);
+     }
+ });
 
 
     }
@@ -77,8 +91,6 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-
-
     public void Register(View view) {
         closeKeyboard();
         String user_name = userNameEdt.getText().toString().trim();
@@ -88,6 +100,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
         String phones = phone.getText().toString().trim();
+        String studentid = stdid.getText().toString().trim();
 
         boolean tchrad = tch_RadioButton.isChecked();
         boolean stdrad = std_RadioButton.isChecked();
@@ -101,69 +114,67 @@ public class SignupActivity extends AppCompatActivity {
                 if (!password.isEmpty() && password.length() > 6) {
                     if (!confirm_password.isEmpty()) {
                         if (password.equalsIgnoreCase(confirm_password)) {
-                            if (stdrad==true || tchrad==true){
-                                  // User user = new User(user_name, email, password, phones, uuid.toString());
+                            if (stdrad == true || tchrad == true) {
+                                // User user = new User(user_name, email, password, phones, uuid.toString());
 
-                            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()){
-                                        if (stdrad){
-                                            User user = new User(user_name, email, password, phones, 0 , mAuth.getCurrentUser().getUid());
-                                            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
 
-                                                        Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
-                                                        reg_progressBar.setVisibility(View.INVISIBLE);
-                                                        register2();
+                                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            if (stdrad) {
+                                                User user = new User(user_name, email, password, phones, studentid, 0, mAuth.getCurrentUser().getUid());
+                                                firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
 
-                                                    } else {
-                                                        Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
-                                                        reg_progressBar.setVisibility(View.INVISIBLE);
+                                                            Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
+                                                            reg_progressBar.setVisibility(View.INVISIBLE);
+                                                            register2();
 
+                                                        } else {
+                                                            Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
+                                                            reg_progressBar.setVisibility(View.INVISIBLE);
+
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
 
-                                        }else if (tchrad){
-                                            User user = new User(user_name, email, password, phones, 1 , mAuth.getCurrentUser().getUid());
-                                            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if (task.isSuccessful()) {
+                                            } else if (tchrad) {
+                                                User user = new User(user_name, email, password, phones, "null", 1, mAuth.getCurrentUser().getUid());
+                                                firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
 
-                                                        Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
-                                                        reg_progressBar.setVisibility(View.INVISIBLE);
-                                                        register2();
+                                                            Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
+                                                            reg_progressBar.setVisibility(View.INVISIBLE);
+                                                            register2();
 
-                                                    } else {
-                                                        Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
-                                                        reg_progressBar.setVisibility(View.INVISIBLE);
+                                                        } else {
+                                                            Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
+                                                            reg_progressBar.setVisibility(View.INVISIBLE);
 
+                                                        }
                                                     }
-                                                }
-                                            });
+                                                });
+                                            }
+
+
                                         }
-
-
                                     }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(SignupActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(SignupActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                            }else {
+                            } else {
                                 Toast.makeText(this, "Choose account type", Toast.LENGTH_SHORT).show();
 
                             }
-
-
-
 
 
                         } else {

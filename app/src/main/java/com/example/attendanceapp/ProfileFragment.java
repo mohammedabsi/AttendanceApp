@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,6 +51,7 @@ public class ProfileFragment extends Fragment {
     private ConstraintLayout logout , edtpass;
 
     TextView usernamepro, emailpro, phonepro ,accounttypepro;
+    TextInputLayout accounttypeprolayout ;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,6 +105,7 @@ public class ProfileFragment extends Fragment {
         accounttypepro = v.findViewById(R.id.accounttypepro);
         logout = v.findViewById(R.id.logout);
         edtpass = v.findViewById(R.id.edtpass);
+        accounttypeprolayout = v.findViewById(R.id.accounttypeprolayout);
 
         dialog = new Dialog(getActivity());
         UpdatePass();
@@ -136,9 +139,11 @@ public class ProfileFragment extends Fragment {
 
                     if (task.getResult().get("type").toString().equalsIgnoreCase("0")){
 
-                        accounttypepro.setText("Student");
+                        accounttypepro.setText(task.getResult().getString("stdid"));
+                        accounttypeprolayout.setHelperText("Student");
                     }else{
                         accounttypepro.setText("Teacher");
+                       // accounttypeprolayout.setHelperText("Teacher");
                     }
 
 
