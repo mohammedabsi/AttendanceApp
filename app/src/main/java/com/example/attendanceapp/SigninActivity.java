@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -27,6 +29,7 @@ public class SigninActivity extends AppCompatActivity {
     private FirebaseFirestore mfirebaseFirestore;
 
     private EditText emailEdt, passwordEdt;
+    private LinearLayout linear ;
     private ProgressBar log_progressBar;
 
     @Override
@@ -39,6 +42,7 @@ public class SigninActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
         emailEdt = findViewById(R.id.emailEdt);
+        linear = findViewById(R.id.linear);
         passwordEdt = findViewById(R.id.passwordEdt);
         log_progressBar = findViewById(R.id.log_progressBar);
     }
@@ -72,14 +76,37 @@ public class SigninActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     if (email.equalsIgnoreCase("admin@admin.com") && password.equalsIgnoreCase("admin123")) {
-                        Toast.makeText(SigninActivity.this, "Login success", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(linear, "Register Success ", Snackbar.LENGTH_LONG)
+                                .show();
                         startActivity(new Intent(SigninActivity.this, AdminActivity.class));
                         finish();
                     }else {
+mfirebaseFirestore.collection("User").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    @Override
+    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (task.isSuccessful()){
+            if (task.getResult().get("type").toString().equalsIgnoreCase("2")){
+                Snackbar.make(linear, "Your Account is not verified yet , wait till Verification", Snackbar.LENGTH_LONG)
+                        .show();
+                log_progressBar.setVisibility(View.INVISIBLE);
 
-                        Toast.makeText(SigninActivity.this, "Login success", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SigninActivity.this, MainActivity.class));
-                        finish();
+            }else {
+                Snackbar.make(linear, "Register Success ", Snackbar.LENGTH_LONG)
+                        .show();
+                startActivity(new Intent(SigninActivity.this, MainActivity.class));
+                finish();
+            }
+        }
+    }
+}).addOnFailureListener(new OnFailureListener() {
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        Snackbar.make(linear, e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                .show();
+        log_progressBar.setVisibility(View.GONE);
+    }
+});
+
 
 
                     }
@@ -91,7 +118,8 @@ public class SigninActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SigninActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Snackbar.make(linear, e.getLocalizedMessage(), Snackbar.LENGTH_LONG)
+                        .show();
                 log_progressBar.setVisibility(View.GONE);
             }
         });

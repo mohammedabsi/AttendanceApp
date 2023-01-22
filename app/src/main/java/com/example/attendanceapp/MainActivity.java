@@ -29,14 +29,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-//        logout = findViewById(R.id.logout);
-//
-//        logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+
         infbottomNavigationView = findViewById(R.id.bottomNavigationView);
         infbottomNavigationView.setBackground(null);
 

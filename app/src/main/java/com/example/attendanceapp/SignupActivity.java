@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -31,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmPasswordEdt, userNameEdt, emailEdt, passwordEdt, phone;
     private ProgressBar reg_progressBar;
     private EditText stdid;
+    private LinearLayout reglinear ;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
@@ -46,6 +49,7 @@ public class SignupActivity extends AppCompatActivity {
         userNameEdt = findViewById(R.id.userNameEdt);
         emailEdt = findViewById(R.id.emailEdt);
         passwordEdt = findViewById(R.id.passwordreg);
+        reglinear = findViewById(R.id.reglinear);
         confirmPasswordEdt = findViewById(R.id.confirmPasswordEdt);
         phone = findViewById(R.id.phone);
         reg_progressBar = findViewById(R.id.reg_progressBar);
@@ -129,12 +133,14 @@ public class SignupActivity extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
 
-                                                            Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
+                                                            Snackbar.make(reglinear, "Register Success ", Snackbar.LENGTH_LONG)
+                                                                    .show();
                                                             reg_progressBar.setVisibility(View.INVISIBLE);
                                                             register2();
 
                                                         } else {
-                                                            Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
+                                                            Snackbar.make(reglinear, "Register Failed !!", Snackbar.LENGTH_LONG)
+                                                                    .show();
                                                             reg_progressBar.setVisibility(View.INVISIBLE);
 
                                                         }
@@ -142,18 +148,22 @@ public class SignupActivity extends AppCompatActivity {
                                                 });
 
                                             } else if (tchrad) {
-                                                User user = new User(user_name, email, password, phones, "null", 1, mAuth.getCurrentUser().getUid() , null);
+                                                User user = new User(user_name, email, password, phones, "null", 2, mAuth.getCurrentUser().getUid() , null);
                                                 firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
 
-                                                            Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
+//                                                            Toast.makeText(SignupActivity.this, "Register success ", Toast.LENGTH_SHORT).show();
+//                                                            register2();
                                                             reg_progressBar.setVisibility(View.INVISIBLE);
-                                                            register2();
+
+                                                            Snackbar.make(reglinear, "Register Success, please wait till Verification", Snackbar.LENGTH_LONG)
+                                                                    .show();
 
                                                         } else {
-                                                            Toast.makeText(SignupActivity.this, "Register Failed ", Toast.LENGTH_SHORT).show();
+                                                            Snackbar.make(reglinear, "Register Failed !!", Snackbar.LENGTH_LONG)
+                                                                    .show();
                                                             reg_progressBar.setVisibility(View.INVISIBLE);
 
                                                         }
