@@ -16,8 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.attendanceapp.databinding.FragmentTeacherMainBinding;
@@ -33,12 +36,14 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
@@ -48,15 +53,16 @@ import java.util.Locale;
  * Use the {@link TeacherMainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeacherMainFragment extends Fragment {
+public class TeacherMainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     FragmentTeacherMainBinding binding;
-    FirebaseAuth mAuth ;
+
+    FirebaseAuth mAuth;
     Date d = new Date();
     SimpleDateFormat enDate = new SimpleDateFormat("MMMM d, yyyy ", new Locale("en"));
     String en = enDate.format(d);
-    CharSequence s  = DateFormat.format("MMMM d, yyyy ", d.getTime());
-    private  FirebaseFirestore firestore;
+    CharSequence s = DateFormat.format("MMMM d, yyyy ", d.getTime());
+    private FirebaseFirestore firestore;
 
     BottomSheetDialog dialog;
 
@@ -108,6 +114,40 @@ public class TeacherMainFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
+        binding.coursesspinner.setOnItemSelectedListener(this);
+
+        // Create the instance of ArrayAdapter
+        // having the list of courses
+
+
+//        ad.setDropDownViewResource(
+//                android.R.layout
+//                        .simple_spinner_dropdown_item);
+
+
+        firestore.collection("User").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    String[] arrayList = {"sub1","sub2","sub3"};
+
+
+
+//                    ArrayList<String> x = (ArrayList<String>) filteredList.get(position).getImgTags();
+
+                    Log.d("ssTAG", "onComplete: " + arrayList);
+
+                    ArrayAdapter ad = new ArrayAdapter(getContext(),
+                            android.R.layout.simple_spinner_dropdown_item,
+                            arrayList);
+
+                    binding.coursesspinner.setAdapter(ad);
+
+                }
+            }
+        });
+
 
 
 
@@ -142,25 +182,25 @@ public class TeacherMainFragment extends Fragment {
 
         Attendance attendance = new Attendance("null", en);
 
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ss= subEdit.getText().toString();
+                String ss = subEdit.getText().toString();
                 User user2 = new User(Collections.singletonList(ss));
 //dialog.dismiss();
-                if (!ss.isEmpty()){
+                if (!ss.isEmpty()) {
 
                     firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection(ss).document(ss).set(attendance).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Toast.makeText(getActivity(), "Collection Added", Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }
                     });
                     firestore.collection("User").document(mAuth.getCurrentUser().getUid()).update("subs", FieldValue.arrayUnion(ss));
-
 
 
                 }
@@ -198,21 +238,22 @@ public class TeacherMainFragment extends Fragment {
 
     }
 
+
     ActivityResultLauncher<ScanOptions> barlauncher = registerForActivityResult(new ScanContract(), result ->
     {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        if (result.getContents()!= null){
+        if (result.getContents() != null) {
 
             builder.setTitle(result.getContents());
-            Attendance attendance2 = new Attendance(result.getContents(),en);
-            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection("sub1").document("sub1").update(en,FieldValue.arrayUnion(attendance2)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            Attendance attendance2 = new Attendance(result.getContents(), en);
+            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection("sub1").document("sub1").update(en, FieldValue.arrayUnion(attendance2)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-               if (task.isSuccessful()){
-                   Toast.makeText(getActivity(), "student Added", Toast.LENGTH_SHORT).show();
-               }
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getActivity(), "student Added", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -235,4 +276,13 @@ public class TeacherMainFragment extends Fragment {
     });
 
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
 }
