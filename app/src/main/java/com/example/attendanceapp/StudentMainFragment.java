@@ -91,7 +91,7 @@ public class StudentMainFragment extends Fragment {
 
                     try {
                         //BitMatrix class to encode entered text and set Width & Height
-                        BitMatrix mMatrix = multiFormatWriter.encode(task.getResult().getString("userName")+"\n" +task.getResult().getString("email"), BarcodeFormat.QR_CODE, 400, 400);
+                        BitMatrix mMatrix = multiFormatWriter.encode(task.getResult().getString("userName")+"\n", BarcodeFormat.QR_CODE, 400, 400);
                         BarcodeEncoder mEncoder = new BarcodeEncoder();
                         Bitmap mBitmap = mEncoder.createBitmap(mMatrix);//creating bitmap of code
                         binding.stdimageCode.setImageBitmap(mBitmap);//Setting generated QR code to imageView

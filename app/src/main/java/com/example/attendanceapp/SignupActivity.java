@@ -123,7 +123,7 @@ public class SignupActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             if (stdrad) {
-                                                User user = new User(user_name, email, password, phones, studentid, 0, mAuth.getCurrentUser().getUid());
+                                                User user = new User(user_name, email, password, phones, studentid, 0, mAuth.getCurrentUser().getUid(),null);
                                                 firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -142,7 +142,7 @@ public class SignupActivity extends AppCompatActivity {
                                                 });
 
                                             } else if (tchrad) {
-                                                User user = new User(user_name, email, password, phones, "null", 1, mAuth.getCurrentUser().getUid());
+                                                User user = new User(user_name, email, password, phones, "null", 1, mAuth.getCurrentUser().getUid() , null);
                                                 firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {

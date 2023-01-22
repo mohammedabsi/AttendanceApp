@@ -1,17 +1,31 @@
 package com.example.attendanceapp;
+
+import java.util.List;
+
 public class User {
 
     public String  mUserName , email, password , phone   , id , stdid ;
     public int type ;
+    private List<String> subs;
 
 
+    public List<String> getSubs() {
+        return subs;
+    }
 
+    public void setSubs(List<String> subs) {
+        this.subs = subs;
+    }
+
+    public User(List<String> subs) {
+        this.subs = subs;
+    }
 
     public User() {
 
     }
 
-    public User(String mUserName, String email, String password , String  phone , String stdid ,  int type , String id ) {
+    public User(String mUserName, String email, String password , String  phone , String stdid ,  int type , String id ,List<String> subs  ) {
 
         this.mUserName = mUserName;
         this.email = email;
@@ -20,6 +34,7 @@ public class User {
         this.stdid = stdid;
         this.type = type;
         this.id = id;
+        this.subs = subs;
 
 
 

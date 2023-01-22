@@ -2,19 +2,46 @@ package com.example.attendanceapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.attendanceapp.databinding.FragmentMainBinding;
+import com.example.attendanceapp.databinding.FragmentTeacherMainBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +50,15 @@ import com.journeyapps.barcodescanner.ScanOptions;
  */
 public class TeacherMainFragment extends Fragment {
 
-    FragmentMainBinding binding;
+    FragmentTeacherMainBinding binding;
+    FirebaseAuth mAuth ;
+    Date d = new Date();
+    SimpleDateFormat enDate = new SimpleDateFormat("MMMM d, yyyy ", new Locale("en"));
+    String en = enDate.format(d);
+    CharSequence s  = DateFormat.format("MMMM d, yyyy ", d.getTime());
+    private  FirebaseFirestore firestore;
+
+    BottomSheetDialog dialog;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,14 +104,73 @@ public class TeacherMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentMainBinding.inflate(inflater, container, false);
+        binding = FragmentTeacherMainBinding.inflate(inflater, container, false);
+        mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+
+
+
+
+
         binding.scantea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 scanCode();
             }
         });
+
+        dialog = new BottomSheetDialog(getActivity());
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createDialog();
+
+            }
+
+
+        });
+
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return binding.getRoot();
+    }
+
+    private void createDialog() {
+        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_teacher, null, false);
+
+        Button add = view.findViewById(R.id.add_sub);
+        EditText subEdit = view.findViewById(R.id.subedit);
+
+        Attendance attendance = new Attendance("null", en);
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ss= subEdit.getText().toString();
+                User user2 = new User(Collections.singletonList(ss));
+//dialog.dismiss();
+                if (!ss.isEmpty()){
+
+                    firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection(ss).document(ss).set(attendance).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(getActivity(), "Collection Added", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                    firestore.collection("User").document(mAuth.getCurrentUser().getUid()).update("subs", FieldValue.arrayUnion(ss));
+
+
+
+                }
+
+            }
+        });
+
+        dialog.setContentView(view);
+        dialog.show();
+
     }
 
     private void scanCode() {
@@ -89,15 +183,48 @@ public class TeacherMainFragment extends Fragment {
 
     }
 
+    public void RetrieveNewsData2() {
+
+        DocumentReference deliveredeDoc = firestore.collection("User").document(mAuth.getCurrentUser().getUid());
+
+
+        deliveredeDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+            }
+        });
+
+
+    }
+
     ActivityResultLauncher<ScanOptions> barlauncher = registerForActivityResult(new ScanContract(), result ->
     {
-        String str = result.getContents();
-        String[] arrOfStr = str.split("\n", -2);
 
-        for (String a : arrOfStr)
-            System.out.println(a);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(result.getContents());
+
+        if (result.getContents()!= null){
+
+            builder.setTitle(result.getContents());
+            Attendance attendance2 = new Attendance(result.getContents(),en);
+            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection("sub1").document("sub1").update(en,FieldValue.arrayUnion(attendance2)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+               if (task.isSuccessful()){
+                   Toast.makeText(getActivity(), "student Added", Toast.LENGTH_SHORT).show();
+               }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+
+            builder.setTitle("No user been Added");
+        }
+
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -106,4 +233,6 @@ public class TeacherMainFragment extends Fragment {
         }).show();
 
     });
+
+
 }
