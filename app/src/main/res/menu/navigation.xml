@@ -13,6 +13,12 @@
         app:showAsAction="ifRoom"
         android:title="Home"
          />
+    <item
+        android:id="@+id/navigation_addnews"
+        android:icon="@drawable/ic_addnews"
+        app:showAsAction="ifRoom"
+        android:title="add news"
+         />
 
 
 

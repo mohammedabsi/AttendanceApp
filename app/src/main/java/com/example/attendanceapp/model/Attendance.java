@@ -1,4 +1,4 @@
-package com.example.attendanceapp;
+package com.example.attendanceapp.model;
 
 public class Attendance {
     String name  ;

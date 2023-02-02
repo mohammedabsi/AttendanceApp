@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -18,12 +19,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.attendanceapp.adapter.AttendanceAdapter;
+import com.example.attendanceapp.adapter.NewStudentAdapter;
 import com.example.attendanceapp.databinding.FragmentTeacherMainBinding;
+import com.example.attendanceapp.model.Attendance;
+import com.example.attendanceapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -36,16 +38,13 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -53,16 +52,22 @@ import java.util.Locale;
  * Use the {@link TeacherMainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeacherMainFragment extends Fragment implements AdapterView.OnItemSelectedListener {
+public class TeacherMainFragment extends Fragment implements AdapterView.OnItemSelectedListener , RecyclerViewInterface {
 
     FragmentTeacherMainBinding binding;
 
     FirebaseAuth mAuth;
+    private FirebaseFirestore firestore;
+    LinearLayoutManager layoutManager ;
+
+    private AttendanceAdapter attendanceAdapter;
+    private ArrayList<User> attendancearraylist;
     Date d = new Date();
     SimpleDateFormat enDate = new SimpleDateFormat("MMMM d, yyyy ", new Locale("en"));
     String en = enDate.format(d);
     CharSequence s = DateFormat.format("MMMM d, yyyy ", d.getTime());
-    private FirebaseFirestore firestore;
+
+   // String[] arrayList = {"sub1", "sub2", "sub3"};
 
     BottomSheetDialog dialog;
 
@@ -116,13 +121,6 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
 
         binding.coursesspinner.setOnItemSelectedListener(this);
 
-        // Create the instance of ArrayAdapter
-        // having the list of courses
-
-
-//        ad.setDropDownViewResource(
-//                android.R.layout
-//                        .simple_spinner_dropdown_item);
 
 
         firestore.collection("User").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -130,26 +128,20 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
 
-                    String[] arrayList = {"sub1","sub2","sub3"};
+                    DocumentSnapshot document = task.getResult();
+                    List<String> group = (List<String>) document.get("subs");
 
-
-
-//                    ArrayList<String> x = (ArrayList<String>) filteredList.get(position).getImgTags();
-
-                    Log.d("ssTAG", "onComplete: " + arrayList);
+                    Log.d("ssTAG", "onComplete: " + group);
 
                     ArrayAdapter ad = new ArrayAdapter(getContext(),
                             android.R.layout.simple_spinner_dropdown_item,
-                            arrayList);
+                            group);
 
                     binding.coursesspinner.setAdapter(ad);
 
                 }
             }
         });
-
-
-
 
 
         binding.scantea.setOnClickListener(new View.OnClickListener() {
@@ -160,58 +152,26 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
         });
 
         dialog = new BottomSheetDialog(getActivity());
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createDialog();
 
-            }
-
-
-        });
 
         dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        binding.coursesspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                initRecycler();
+                RetrieveNewsData();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return binding.getRoot();
     }
 
-    private void createDialog() {
-        View view = getLayoutInflater().inflate(R.layout.bottom_sheet_teacher, null, false);
 
-        Button add = view.findViewById(R.id.add_sub);
-        EditText subEdit = view.findViewById(R.id.subedit);
-
-        Attendance attendance = new Attendance("null", en);
-
-
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String ss = subEdit.getText().toString();
-                User user2 = new User(Collections.singletonList(ss));
-//dialog.dismiss();
-                if (!ss.isEmpty()) {
-
-                    firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection(ss).document(ss).set(attendance).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(), "Collection Added", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-                        }
-                    });
-                    firestore.collection("User").document(mAuth.getCurrentUser().getUid()).update("subs", FieldValue.arrayUnion(ss));
-
-
-                }
-
-            }
-        });
-
-        dialog.setContentView(view);
-        dialog.show();
-
-    }
 
     private void scanCode() {
         ScanOptions options = new ScanOptions();
@@ -223,20 +183,106 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
 
     }
 
-    public void RetrieveNewsData2() {
+    private void initRecycler() {
+        attendancearraylist = new ArrayList<User>();
+        layoutManager = new LinearLayoutManager(getActivity());
+        binding.attendancerecycler.setLayoutManager(layoutManager);
+        binding.attendancerecycler.setHasFixedSize(true);
 
-        DocumentReference deliveredeDoc = firestore.collection("User").document(mAuth.getCurrentUser().getUid());
+        String course = binding.coursesspinner.getSelectedItem().toString();
 
 
-        deliveredeDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        attendanceAdapter = new AttendanceAdapter(this,attendancearraylist, firestore,getContext() ,course);
+        binding.attendancerecycler.setAdapter(attendanceAdapter);
+    }
 
-            }
-        });
+    private void RetrieveNewsData() {
+
+
+        if(binding.coursesspinner != null && binding.coursesspinner.getSelectedItem() !=null ) {
+            firestore.collection("User")
+                    .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .collection(binding.coursesspinner.getSelectedItem().toString())
+                    .document(binding.coursesspinner.getSelectedItem().toString())
+                    .collection("Students")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if (error != null) {
+
+                                Log.d("fireStore Error", error.getMessage().toString());
+
+                                return;
+                            }
+                            for (DocumentChange documentChange : value.getDocumentChanges()) {
+                                if (documentChange.getType() == DocumentChange.Type.ADDED) {
+
+                                    attendancearraylist.add(documentChange.getDocument().
+                                            toObject(User.class));
+
+
+
+                                }
+
+                                attendanceAdapter.notifyDataSetChanged();
+
+
+                            }
+
+
+                        }
+                    });
+        }
+        else  {
+//            firestore.collection("User").document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                    if (task.isSuccessful()){
+//                        List<String> group = (List<String>) task.getResult().get("subs");
+//
+//                        firestore.collection("User")
+//                                .document(id)
+//                                .collection(binding.courseadminspinner.getSelectedItem().toString())
+//                                .document(binding.courseadminspinner.getSelectedItem().toString())
+//                                .collection("Students")
+//                                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                                    @Override
+//                                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+//                                        if (error != null) {
+//
+//                                            Log.d("fireStore Error", error.getMessage().toString());
+//
+//                                            return;
+//                                        }
+//                                        for (DocumentChange documentChange : value.getDocumentChanges()) {
+//                                            if (documentChange.getType() == DocumentChange.Type.ADDED) {
+//
+//                                                studentArrayList.add(documentChange.getDocument().
+//                                                        toObject(User.class));
+//
+//
+//
+//                                            }
+//
+//                                            newStudentAdapterAdapter.notifyDataSetChanged();
+//
+//
+//                                        }
+//
+//
+//                                    }
+//                                });
+//
+//                    }
+//                }
+//            });
+        }
+
 
 
     }
+
+
 
 
     ActivityResultLauncher<ScanOptions> barlauncher = registerForActivityResult(new ScanContract(), result ->
@@ -248,7 +294,7 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
 
             builder.setTitle(result.getContents());
             Attendance attendance2 = new Attendance(result.getContents(), en);
-            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection("sub1").document("sub1").update(en, FieldValue.arrayUnion(attendance2)).addOnCompleteListener(new OnCompleteListener<Void>() {
+            firestore.collection("User").document(mAuth.getCurrentUser().getUid()).collection(binding.coursesspinner.getSelectedItem().toString()).document(binding.coursesspinner.getSelectedItem().toString()).update(en, FieldValue.arrayUnion(attendance2)).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
@@ -279,10 +325,35 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
+        firestore.collection("User").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+
+                    DocumentSnapshot document = task.getResult();
+                    List<String> group = (List<String>) document.get("subs");
+
+                    Toast.makeText(getActivity(), ""+group.get(i), Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+        });
+
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+    @Override
+    public void onItemClick(Integer position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(Integer position) {
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.attendanceapp;
+package com.example.attendanceapp.adapter;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,12 +12,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.attendanceapp.R;
+import com.example.attendanceapp.RecyclerViewInterface;
+import com.example.attendanceapp.model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RequestsviewHolder> {
+    private final RecyclerViewInterface recyclerViewInterface;
 
     Context context;
     ArrayList<User> userArrayList;
@@ -25,7 +28,8 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
 
-    public RequestsAdapter(Context context, ArrayList<User> userArrayList, FirebaseFirestore firestore) {
+    public RequestsAdapter(RecyclerViewInterface recyclerViewInterface, ArrayList<User> userArrayList, FirebaseFirestore firestore , Context context) {
+        this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
         this.userArrayList = userArrayList;
         this.firestore = firestore;
@@ -38,7 +42,7 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
         View v = LayoutInflater.from(context).inflate(R.layout.single_request_item, parent, false);
 //       notifyDataSetChanged();
 
-        return new RequestsviewHolder(v);
+        return new RequestsviewHolder(v, recyclerViewInterface);
 
     }
 
@@ -82,14 +86,26 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
         TextView owner_req, owner_email_req;
         ImageButton accept_req, reject_req;
 
-        public RequestsviewHolder(@NonNull View itemView) {
+        public RequestsviewHolder(@NonNull View itemView , RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             owner_req = itemView.findViewById(R.id.ownerName_request);
             owner_email_req = itemView.findViewById(R.id.owner_email_req);
             accept_req = itemView.findViewById(R.id.accept_req);
             reject_req = itemView.findViewById(R.id.reject_req);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recyclerViewInterface != null) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(pos);
+                        }
+                    }
+                }
+            });
 
 
         }
+
     }
 }

@@ -3,6 +3,8 @@ package com.example.attendanceapp;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.attendanceapp.adapter.RequestsAdapter;
+import com.example.attendanceapp.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -13,14 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.attendanceapp.databinding.ActivityAdminBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,15 +28,13 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AdminActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity implements RecyclerViewInterface {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityAdminBinding binding;
 
-//    private RecyclerView accept_requests_recycler;
-//    ProgressBar AcceptReqsprogressBar;
+
     ArrayList<User> requestUserArrayList;
     RequestsAdapter requestsAdapter;
 
@@ -50,7 +45,9 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityAdminBinding.inflate(getLayoutInflater());
+        binding.toolbar.setTitle("Department Head");
         setSupportActionBar(binding.toolbar);
+
         setContentView(binding.getRoot());
 
         binding.AcceptReqsprogressBar.setVisibility(View.VISIBLE);
@@ -62,22 +59,17 @@ public class AdminActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         requestUserArrayList = new ArrayList<User>();
 
-        requestsAdapter = new RequestsAdapter(this, requestUserArrayList, firestore);
+        requestsAdapter = new RequestsAdapter(this, requestUserArrayList, firestore, getApplicationContext());
         binding.acceptRequestsRecycler.setAdapter(requestsAdapter);
         RetrieveDataFirestore();
 
 
-
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        binding.adminfab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startActivity(new Intent(AdminActivity.this, AdminFeedActivity.class));
             }
         });
-
-
 
 
     }
@@ -98,7 +90,7 @@ public class AdminActivity extends AppCompatActivity {
                     if (documentChange.getType() == DocumentChange.Type.ADDED) {
 
                         requestUserArrayList.add(documentChange.getDocument().toObject(User.class));
-                        Log.d("onEvent:", "onEvent: "+requestUserArrayList.get(0).getUserName());
+                        Log.d("onEvent:", "onEvent: " + requestUserArrayList.get(0).getUserName());
                     }
                     requestsAdapter.notifyDataSetChanged();
                     if (binding.AcceptReqsprogressBar.isShown()) {
@@ -108,7 +100,6 @@ public class AdminActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 
     }
@@ -125,11 +116,27 @@ public class AdminActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.navigation_adminlogout:
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(this,SigninActivity.class));
+                startActivity(new Intent(this, SigninActivity.class));
                 finish();
                 return true;
+            case R.id.navigation_news:
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onItemClick(Integer position) {
+
+        Intent intent = new Intent(AdminActivity.this, AddCoursesActivity.class);
+        intent.putExtra("message", requestUserArrayList.get(position).getId());
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onDeleteClick(Integer position) {
+
     }
 }

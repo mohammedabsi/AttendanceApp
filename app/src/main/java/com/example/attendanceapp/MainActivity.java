@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView infbottomNavigationView;
     private Fragment selectedFragment = null;
-    private TextView welcome_tv;
+    private TextView welcome_tv , title;
 //    private ImageView logout;
 
     @Override
@@ -30,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
 
+
         infbottomNavigationView = findViewById(R.id.bottomNavigationView);
+        title = findViewById(R.id.title);
         infbottomNavigationView.setBackground(null);
 
         if (savedInstanceState == null) {
@@ -41,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
                         if (task.getResult().get("type").toString().equalsIgnoreCase("0")) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     new StudentMainFragment()).commit();
+                            infbottomNavigationView.getMenu().removeItem(R.id.navigation_addnews);
                         } else {
                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                     new TeacherMainFragment()).commit();
+
                         }
                     }
                 }
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     switch (item.getItemId()) {
 
                         case R.id.navigation_home:
+                            title.setText("Main Page");
 
                             FirebaseFirestore.getInstance().collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                             selectedFragment = new StudentMainFragment();
                                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
                                                     selectedFragment).commit();
+
                                         } else {
                                             selectedFragment = new TeacherMainFragment();
                                             getSupportFragmentManager().beginTransaction().replace(R.id.container,
@@ -93,10 +99,17 @@ public class MainActivity extends AppCompatActivity {
 
                         case R.id.navigation_news:
                             selectedFragment = new NewsFragment();
+                            title.setText("News");
+
+                            break;
+                        case R.id.navigation_addnews:
+                            selectedFragment = new AddNewsFragment();
+                            title.setText("News");
 
                             break;
                         case R.id.navigation_profile:
                             selectedFragment = new ProfileFragment();
+                            title.setText("Profile");
 
                             break;
 

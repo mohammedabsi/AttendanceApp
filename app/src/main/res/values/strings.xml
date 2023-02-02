@@ -148,6 +148,8 @@
     <string name="title_activity_admin">AdminActivity</string>
     <string name="update_pass">Update Password</string>
     <string name="studentid">Student Id</string>
+    <string name="new_post">New Post</string>
+    <string name="create">Create</string>
 
 
 </resources>

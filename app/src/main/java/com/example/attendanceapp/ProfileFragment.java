@@ -48,7 +48,7 @@ public class ProfileFragment extends Fragment {
 
     private DocumentReference reference1 = firestore.collection("User").document(user.getUid());
 
-    private ConstraintLayout logout , edtpass;
+    private ConstraintLayout logout , edtpass , addexcuse;
 
     TextView usernamepro, emailpro, phonepro ,accounttypepro;
     TextInputLayout accounttypeprolayout ;
@@ -106,11 +106,20 @@ public class ProfileFragment extends Fragment {
         logout = v.findViewById(R.id.logout);
         edtpass = v.findViewById(R.id.edtpass);
         accounttypeprolayout = v.findViewById(R.id.accounttypeprolayout);
+        addexcuse = v.findViewById(R.id.addexcuse);
+        addexcuse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FeedBackFragment fragobj = new FeedBackFragment();
+
+                getParentFragmentManager().beginTransaction().replace(R.id.container,
+                        fragobj).addToBackStack(null).commit();
+            }
+        });
 
         dialog = new Dialog(getActivity());
         UpdatePass();
-//     //   final Snackbar snackbar = Snackbar
-//                .make(drawerLayout, "Coming On next Version", Snackbar.LENGTH_SHORT).setTextColor(getResources().getColor(R.color.secondry_color)).setBackgroundTint(getResources().getColor(R.color.secondry_color));
+
         edtpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,9 +150,12 @@ public class ProfileFragment extends Fragment {
 
                         accounttypepro.setText(task.getResult().getString("stdid"));
                         accounttypeprolayout.setHelperText("Student");
+                        addexcuse.setVisibility(View.VISIBLE);
                     }else{
                         accounttypepro.setText("Teacher");
-                       // accounttypeprolayout.setHelperText("Teacher");
+                        addexcuse.setVisibility(View.GONE);
+
+                        // accounttypeprolayout.setHelperText("Teacher");
                     }
 
 

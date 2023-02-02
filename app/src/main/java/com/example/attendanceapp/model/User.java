@@ -1,4 +1,4 @@
-package com.example.attendanceapp;
+package com.example.attendanceapp.model;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ public class User {
     public String  mUserName , email, password , phone   , id , stdid ;
     public int type ;
     private List<String> subs;
+
+
 
 
     public List<String> getSubs() {
@@ -39,6 +41,12 @@ public class User {
 
 
 
+    }
+
+    public User(String mUserName, String email, String id) {
+        this.mUserName = mUserName;
+        this.email = email;
+        this.id = id;
     }
 
     public String getStdid() {

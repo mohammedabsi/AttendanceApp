@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:orientation="vertical"
+    tools:context=".FeedBackFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_addimg"
+        android:id="@+id/feedback_image"
+        />
+
+    <ProgressBar
+        android:id="@+id/feedprogres"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/teal_700"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:id="@+id/feedupload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="upload FeedBack"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/feedbackrecycler"
+        />
+
+
+
+</LinearLayout>

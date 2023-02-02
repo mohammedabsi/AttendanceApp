@@ -3,7 +3,6 @@ package com.example.attendanceapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,15 +16,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.attendanceapp.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.UUID;
+import java.util.Collections;
 
 
 public class SignupActivity extends AppCompatActivity {
@@ -147,8 +148,9 @@ public class SignupActivity extends AppCompatActivity {
                                                     }
                                                 });
 
-                                            } else if (tchrad) {
-                                                User user = new User(user_name, email, password, phones, "null", 2, mAuth.getCurrentUser().getUid() , null);
+                                            } else if
+                                            (tchrad) {
+                                                User user = new User(user_name, email, password, phones, "null", 2, mAuth.getCurrentUser().getUid() , Collections.singletonList("course1"));
                                                 firestore.collection("User").document(mAuth.getCurrentUser().getUid()).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {

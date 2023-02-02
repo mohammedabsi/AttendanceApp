@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/mainpage"
+            android:id="@+id/title"
             android:textColor="@color/white"
             android:textSize="22dp" />
 
