@@ -336,4 +336,5 @@ public class AddCoursesActivity extends AppCompatActivity implements AdapterView
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
 }

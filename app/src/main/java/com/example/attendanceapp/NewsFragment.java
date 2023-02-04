@@ -170,6 +170,13 @@ public class NewsFragment extends Fragment implements RecyclerViewInterface {
 
     @Override
     public void onDeleteClick(Integer position) {
+        postsArrayList.remove(position);
+        postsAdaptar.notifyItemRemoved(position);
+
+    }
+
+    @Override
+    public void onItemLongClick(int position) {
 
     }
 }

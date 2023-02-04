@@ -2,13 +2,22 @@ package com.example.attendanceapp.model;
 
 public class Post {
 
-    String postname , postdesc , mImageurl , mCourseid;
+    String postname , postdesc , mImageurl , mCourseid ,mTeacherID;
 
-    public Post(String postname, String postdesc, String mImageurl , String mCourseid) {
+    public Post(String postname, String postdesc, String mImageurl , String mCourseid , String mTeacherID) {
         this.postname = postname;
         this.postdesc = postdesc;
         this.mImageurl = mImageurl;
         this.mCourseid = mCourseid;
+        this.mTeacherID = mTeacherID;
+    }
+
+    public String getmTeacherID() {
+        return mTeacherID;
+    }
+
+    public void setmTeacherID(String mTeacherID) {
+        this.mTeacherID = mTeacherID;
     }
 
     public String getCourseid() {

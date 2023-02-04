@@ -286,4 +286,9 @@ public class FeedBackFragment extends Fragment implements RecyclerViewInterface 
     public void onDeleteClick(Integer position) {
 
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+
+    }
 }

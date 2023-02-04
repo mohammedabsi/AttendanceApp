@@ -100,6 +100,11 @@ public class AdminFeedActivity extends AppCompatActivity implements RecyclerView
 
     }
 
+    @Override
+    public void onItemLongClick(int position) {
+
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation2, menu);

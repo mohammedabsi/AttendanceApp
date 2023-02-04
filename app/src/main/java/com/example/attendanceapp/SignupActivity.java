@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmPasswordEdt, userNameEdt, emailEdt, passwordEdt, phone;
     private ProgressBar reg_progressBar;
     private EditText stdid;
-    private LinearLayout reglinear ;
+    private ScrollView reglinear ;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 

@@ -146,4 +146,11 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
     public void onDeleteClick(Integer position) {
 
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+
+
+
+    }
 }

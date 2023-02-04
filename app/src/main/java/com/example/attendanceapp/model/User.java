@@ -6,7 +6,7 @@ public class User {
 
     public String  mUserName , email, password , phone   , id , stdid ;
     public int type ;
-    private List<String> subs;
+    public List<String> subs;
 
 
 

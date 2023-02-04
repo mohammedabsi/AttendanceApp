@@ -118,4 +118,13 @@ public class AcceptedAccountsActivity extends AppCompatActivity implements Recyc
     public void onDeleteClick(Integer position) {
 
     }
+
+    @Override
+    public void onItemLongClick(int position) {
+
+//        Intent intent = new Intent(AcceptedAccountsActivity.this, RemoveCoursesAdminActivity.class);
+//        intent.putExtra("message", requestUserArrayList.get(position).getId());
+//        startActivity(intent);
+
+    }
 }

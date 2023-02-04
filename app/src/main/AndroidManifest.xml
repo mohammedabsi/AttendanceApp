@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AttendanceApp"
         tools:targetApi="31">
         <activity
+            android:name=".RemoveCoursesAdminActivity"
+            android:exported="false" />
+        <activity
             android:name=".AcceptedAccountsActivity"
             android:exported="false" />
         <activity

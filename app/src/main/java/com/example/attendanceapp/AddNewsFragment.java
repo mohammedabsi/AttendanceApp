@@ -183,7 +183,7 @@ public class AddNewsFragment extends Fragment {
                                 public void onSuccess(Uri uri) {
                                     String uniqueID = UUID.randomUUID().toString();
                                     String imagePostUrl = uri.toString();
-                                    Post post = new Post(binding.postName.getText().toString(), binding.postDesc.getText().toString(), imagePostUrl , uniqueID);
+                                    Post post = new Post(binding.postName.getText().toString(), binding.postDesc.getText().toString(), imagePostUrl , uniqueID,FirebaseAuth.getInstance().getCurrentUser().getUid());
                                     firestore.collection("Post")
                                             .document(uniqueID)
                                             .set(post)
