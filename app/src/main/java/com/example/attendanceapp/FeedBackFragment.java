@@ -9,13 +9,16 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.attendanceapp.adapter.FeedsAdapter;
 import com.example.attendanceapp.databinding.FragmentFeedBackBinding;
 import com.example.attendanceapp.model.FeedBack;
 import com.example.attendanceapp.model.Post;
@@ -24,14 +27,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -39,7 +47,7 @@ import java.util.UUID;
  * Use the {@link FeedBackFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FeedBackFragment extends Fragment {
+public class FeedBackFragment extends Fragment implements RecyclerViewInterface {
 
     private FragmentFeedBackBinding binding;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -48,6 +56,10 @@ public class FeedBackFragment extends Fragment {
     FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private StorageReference mStorageRef = FirebaseStorage.getInstance().getReference("Images");
     private StorageTask mUploadTask;
+
+    ArrayList<FeedBack> feedUserArrayList;
+    FeedsAdapter feedsAdapter;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -110,8 +122,56 @@ public class FeedBackFragment extends Fragment {
             }
         });
 
+        initRecycler();
+        RetrieveDataFirestore();
+
         return binding.getRoot();
     }
+
+   private void initRecycler(){
+
+       binding.feedprogres.setVisibility(View.VISIBLE);
+       binding.feedbackrecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+       binding.feedbackrecycler.setHasFixedSize(true);
+
+       firestore = FirebaseFirestore.getInstance();
+       feedUserArrayList = new ArrayList<FeedBack>();
+
+       feedsAdapter = new FeedsAdapter(this, feedUserArrayList, firestore, getActivity().getApplicationContext());
+       binding.feedbackrecycler.setAdapter(feedsAdapter);
+    }
+
+    private void RetrieveDataFirestore() {
+
+        firestore.collection("Feedback").whereEqualTo("feedemail",FirebaseAuth.getInstance().getCurrentUser().getEmail()).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    if (binding.feedprogres.isShown()) {
+                        binding.feedprogres.setVisibility(View.GONE);
+                    }
+                    Log.d("Fire Store Error", error.getMessage());
+                    return;
+                }
+                for (DocumentChange documentChange : value.getDocumentChanges()) {
+                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
+
+                        feedUserArrayList.add(documentChange.getDocument().toObject(FeedBack.class));
+                    }
+                    feedsAdapter.notifyDataSetChanged();
+                    if (binding.feedprogres.isShown()) {
+                        binding.feedprogres.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+        });
+
+
+    }
+
 
     private void openFileChooser() {
         Intent intent = new Intent();
@@ -217,4 +277,13 @@ public class FeedBackFragment extends Fragment {
 
     }
 
+    @Override
+    public void onItemClick(Integer position) {
+
+    }
+
+    @Override
+    public void onDeleteClick(Integer position) {
+
+    }
 }

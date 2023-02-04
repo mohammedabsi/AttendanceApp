@@ -1,14 +1,22 @@
 package com.example.attendanceapp.model;
 
+import java.util.Map;
+
 public class Attendance {
     String name  ;
 
     CharSequence date;
 
+
+
     public Attendance(String name, CharSequence date) {
         this.name = name;
         this.date = date;
     }
+
+
+
+
 
     public Attendance() {
     }

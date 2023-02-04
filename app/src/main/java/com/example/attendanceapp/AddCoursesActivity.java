@@ -5,9 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,13 +58,14 @@ public class AddCoursesActivity extends AppCompatActivity implements AdapterView
         super.onCreate(savedInstanceState);
 
         binding = ActivityAddcoursesBinding.inflate(getLayoutInflater());
+        getSupportActionBar().setTitle("Department Head");
         setContentView(binding.getRoot());
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
 
         String id = getIntent().getStringExtra("message");
-//        binding.courseadminspinner.
+
 
         binding.addSub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,7 +306,26 @@ public class AddCoursesActivity extends AppCompatActivity implements AdapterView
 
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation2, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_adminlogout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, SigninActivity.class));
+                finish();
+                return true;
+            case R.id.navigation_news:
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 

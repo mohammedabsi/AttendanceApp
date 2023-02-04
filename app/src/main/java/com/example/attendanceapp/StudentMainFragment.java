@@ -96,8 +96,8 @@ public class StudentMainFragment extends Fragment {
                         Bitmap mBitmap = mEncoder.createBitmap(mMatrix);//creating bitmap of code
                         binding.stdimageCode.setImageBitmap(mBitmap);//Setting generated QR code to imageView
                         // to hide the keyboard
-                        InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        manager.hideSoftInputFromWindow(binding.stdtxt.getApplicationWindowToken(), 0);
+//                        InputMethodManager manager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        manager.hideSoftInputFromWindow(binding.stdtxt.getApplicationWindowToken(), 0);
 
                         binding.stdmmainprg.setVisibility(View.INVISIBLE);
 

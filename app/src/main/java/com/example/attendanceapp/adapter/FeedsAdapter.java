@@ -61,7 +61,16 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.Requestsview
         holder.feedback_email.setText(feedBack.getFeedemail());
         holder.feedstatus.setText(feedBack.getFeedstatus());
 
+if (holder.feedstatus.getText().toString().equalsIgnoreCase("Accepted")){
+    holder.feedstatus.setTextColor(context.getResources().getColor(R.color.teal_700));
 
+
+} else if (holder.feedstatus.getText().toString().equalsIgnoreCase("Rejected")) {
+    holder.feedstatus.setTextColor(context.getResources().getColor(R.color.red));
+}else {
+    holder.feedstatus.setTextColor(context.getResources().getColor(R.color.darkgray));
+
+}
 
         Picasso.get().load(feedBack.getFeedimage()).into(holder.postimg);
         if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equalsIgnoreCase("admin@admin.com")){
@@ -72,8 +81,8 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.Requestsview
 
 
         }else {
-            holder.reject_feed.setVisibility(View.INVISIBLE);
-            holder.accept_feed.setVisibility(View.INVISIBLE);
+            holder.reject_feed.setVisibility(View.GONE);
+            holder.accept_feed.setVisibility(View.GONE);
         }
 
 
@@ -85,13 +94,13 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.Requestsview
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), holder.feedback_name.getText() + "\n is accepted ", Toast.LENGTH_SHORT).show();
                 firestore.collection("Feedback").document(feedBack.getFeedId()).update("feedstatus", "Accepted");
-                holder.feedstatus.setTextColor(context.getResources().getColor(R.color.teal_700));
 
                 firestore.collection("Feedback").document(feedBack.getFeedId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                    if (task.isSuccessful()){
                        holder.feedstatus.setText(task.getResult().getString("feedstatus"));
+                       holder.feedstatus.setTextColor(context.getResources().getColor(R.color.teal_700));
 
                    }
                     }
@@ -104,12 +113,12 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.Requestsview
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), holder.feedback_name.getText() + "\n is rejected :(", Toast.LENGTH_SHORT).show();
                 firestore.collection("Feedback").document(feedBack.getFeedId()).update("feedstatus", "Rejected");
-                holder.feedstatus.setTextColor(context.getResources().getColor(R.color.red));
                 firestore.collection("Feedback").document(feedBack.getFeedId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
                             holder.feedstatus.setText(task.getResult().getString("feedstatus"));
+                            holder.feedstatus.setTextColor(context.getResources().getColor(R.color.red));
 
                         }
                     }

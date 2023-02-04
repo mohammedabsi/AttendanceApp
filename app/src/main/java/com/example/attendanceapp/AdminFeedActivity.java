@@ -1,12 +1,16 @@
 package com.example.attendanceapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.attendanceapp.adapter.FeedsAdapter;
@@ -14,6 +18,7 @@ import com.example.attendanceapp.adapter.RequestsAdapter;
 import com.example.attendanceapp.databinding.ActivityAdminFeedBinding;
 import com.example.attendanceapp.model.FeedBack;
 import com.example.attendanceapp.model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +38,8 @@ public class AdminFeedActivity extends AppCompatActivity implements RecyclerView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAdminFeedBinding.inflate(getLayoutInflater());
+        getSupportActionBar().setTitle("Department Head");
+        setContentView(binding.getRoot());
         setContentView(binding.getRoot());
 
         binding.feedadminprogres.setVisibility(View.VISIBLE);
@@ -92,4 +99,26 @@ public class AdminFeedActivity extends AppCompatActivity implements RecyclerView
     public void onDeleteClick(Integer position) {
 
     }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.navigation2, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_adminlogout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, SigninActivity.class));
+                finish();
+                return true;
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }

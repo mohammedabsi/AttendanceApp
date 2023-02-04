@@ -1,25 +1,21 @@
 package com.example.attendanceapp;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.example.attendanceapp.adapter.RequestsAdapter;
-import com.example.attendanceapp.model.User;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.example.attendanceapp.databinding.ActivityAdminBinding;
+import com.example.attendanceapp.adapter.AcceptedRequestAdapter;
+import com.example.attendanceapp.adapter.RequestsAdapter;
+import com.example.attendanceapp.databinding.ActivityAcceptedAccountsBinding;
+import com.example.attendanceapp.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -29,66 +25,47 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class AdminActivity extends AppCompatActivity implements RecyclerViewInterface {
+public class AcceptedAccountsActivity extends AppCompatActivity implements RecyclerViewInterface {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityAdminBinding binding;
-
+    private ActivityAcceptedAccountsBinding binding;
 
     ArrayList<User> requestUserArrayList;
-    RequestsAdapter requestsAdapter;
+    AcceptedRequestAdapter acceptedRequestAdapter;
 
     FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        binding = ActivityAdminBinding.inflate(getLayoutInflater());
-        binding.toolbar.setTitle("Department Head");
-        setSupportActionBar(binding.toolbar);
-
+        binding = ActivityAcceptedAccountsBinding.inflate(getLayoutInflater());
+       getSupportActionBar().setTitle("Department Head");
         setContentView(binding.getRoot());
 
-        binding.AcceptReqsprogressBar.setVisibility(View.VISIBLE);
-        binding.acceptRequestsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        binding.acceptRequestsRecycler.setHasFixedSize(true);
+        binding.AcceptedReqsprogressBar.setVisibility(View.VISIBLE);
+        binding.acceptedaccountsreycler.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.acceptedaccountsreycler.setHasFixedSize(true);
 
 
         firestore = FirebaseFirestore.getInstance();
         requestUserArrayList = new ArrayList<User>();
 
-        requestsAdapter = new RequestsAdapter(this, requestUserArrayList, firestore, getApplicationContext());
-        binding.acceptRequestsRecycler.setAdapter(requestsAdapter);
+        acceptedRequestAdapter = new AcceptedRequestAdapter(this, requestUserArrayList, firestore, getApplicationContext());
+        binding.acceptedaccountsreycler.setAdapter(acceptedRequestAdapter);
         RetrieveDataFirestore();
 
-        binding.acceptedTeachers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(AdminActivity.this,AcceptedAccountsActivity.class));
-            }
-        });
-
-
-        binding.adminfab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(AdminActivity.this, AdminFeedActivity.class));
-            }
-        });
 
 
     }
-
     private void RetrieveDataFirestore() {
 
-        firestore.collection("User").whereEqualTo("type", 2).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        firestore.collection("User").whereEqualTo("type", 1).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 if (error != null) {
-                    if (binding.AcceptReqsprogressBar.isShown()) {
-                        binding.AcceptReqsprogressBar.setVisibility(View.GONE);
+                    if (binding.AcceptedReqsprogressBar.isShown()) {
+                        binding.AcceptedReqsprogressBar.setVisibility(View.GONE);
                     }
                     Log.d("Fire Store Error", error.getMessage());
                     return;
@@ -99,9 +76,9 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
                         requestUserArrayList.add(documentChange.getDocument().toObject(User.class));
                         Log.d("onEvent:", "onEvent: " + requestUserArrayList.get(0).getUserName());
                     }
-                    requestsAdapter.notifyDataSetChanged();
-                    if (binding.AcceptReqsprogressBar.isShown()) {
-                        binding.AcceptReqsprogressBar.setVisibility(View.GONE);
+                    acceptedRequestAdapter.notifyDataSetChanged();
+                    if (binding.AcceptedReqsprogressBar.isShown()) {
+                        binding.AcceptedReqsprogressBar.setVisibility(View.GONE);
                     }
 
                 }
@@ -111,7 +88,6 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
 
     }
 
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.navigation2, menu);
@@ -126,7 +102,7 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
                 startActivity(new Intent(this, SigninActivity.class));
                 finish();
                 return true;
-
+            case R.id.navigation_news:
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -135,10 +111,6 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
 
     @Override
     public void onItemClick(Integer position) {
-
-        Intent intent = new Intent(AdminActivity.this, AddCoursesActivity.class);
-        intent.putExtra("message", requestUserArrayList.get(position).getId());
-        startActivity(intent);
 
     }
 
