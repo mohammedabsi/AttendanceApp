@@ -63,6 +63,14 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
         binding.acceptRequestsRecycler.setAdapter(requestsAdapter);
         RetrieveDataFirestore();
 
+        if(requestUserArrayList.isEmpty()){
+            binding.AcceptReqsprogressBar.setVisibility(View.GONE);
+            binding.reqTxtVisibilty.setVisibility(View.VISIBLE);
+        }else {
+            binding.AcceptReqsprogressBar.setVisibility(View.GONE);
+            binding.reqTxtVisibilty.setVisibility(View.GONE);
+        }
+
         binding.acceptedTeachers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +107,8 @@ public class AdminActivity extends AppCompatActivity implements RecyclerViewInte
                         requestUserArrayList.add(documentChange.getDocument().toObject(User.class));
                         Log.d("onEvent:", "onEvent: " + requestUserArrayList.get(0).getUserName());
                     }
+
+
                     requestsAdapter.notifyDataSetChanged();
                     if (binding.AcceptReqsprogressBar.isShown()) {
                         binding.AcceptReqsprogressBar.setVisibility(View.GONE);

@@ -78,7 +78,7 @@ public class SigninActivity extends AppCompatActivity {
                     if (email.equalsIgnoreCase("admin@admin.com") && password.equalsIgnoreCase("admin123")) {
                         Snackbar.make(linear, "Register Success ", Snackbar.LENGTH_LONG)
                                 .show();
-                        startActivity(new Intent(SigninActivity.this, AdminActivity.class));
+                        startActivity(new Intent(SigninActivity.this, AdminWelcomeActivity.class));
                         finish();
                     }else {
 mfirebaseFirestore.collection("User").document(mAuth.getCurrentUser().getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

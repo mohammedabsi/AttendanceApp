@@ -212,11 +212,8 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
             HSSFCell hssfCell = hssfRow.createCell(i);
 
 
-
-
-
             hssfCell.setCellValue(dateslist.get(i));
-            Log.d("CreateExcel:", "CreateExcel: "+dateslist.get(i));
+            Log.d("CreateExcel:", "CreateExcel: " + dateslist.get(i));
 
         }
 
@@ -276,11 +273,10 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if (document.exists()){
-                            Map<String, Object> map = task.getResult().getData();
+                            if (document.exists()) {
+                                Map<String, Object> map = task.getResult().getData();
 
-
-
+//todo : get date list here and import it to excel
                                 for (Map.Entry<String, Object> entry : map.entrySet()) {
                                     dateslist.add(entry.getValue().toString());
                                     Log.d("dateslist", entry.getKey());// string key
@@ -289,8 +285,6 @@ public class TeacherMainFragment extends Fragment implements AdapterView.OnItemS
 
                                 }
                             }
-
-
 
 
                         }

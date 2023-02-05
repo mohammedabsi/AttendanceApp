@@ -150,6 +150,7 @@
     <string name="studentid">Student Id</string>
     <string name="new_post">New Post</string>
     <string name="create">Create</string>
+    <string name="title_activity_admin_welcome">AdminWelcomeActivity</string>
 
 
 </resources>

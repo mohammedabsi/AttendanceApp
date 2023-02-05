@@ -58,6 +58,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AcceptReqsprogressBar" />
 
+    <TextView
+        android:id="@+id/req_txt_visibilty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No requests available"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="25dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/accepted_teachers" />
+
     <ProgressBar
         android:id="@+id/AcceptReqsprogressBar"
         style="?android:attr/progressBarStyleSmall"

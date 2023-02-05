@@ -40,7 +40,7 @@ public class AdminFeedActivity extends AppCompatActivity implements RecyclerView
         binding = ActivityAdminFeedBinding.inflate(getLayoutInflater());
         getSupportActionBar().setTitle("Department Head");
         setContentView(binding.getRoot());
-        setContentView(binding.getRoot());
+
 
         binding.feedadminprogres.setVisibility(View.VISIBLE);
         binding.adminrecycler.setLayoutManager(new LinearLayoutManager(this));
